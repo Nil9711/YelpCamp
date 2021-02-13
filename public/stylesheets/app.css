@@ -12,6 +12,11 @@
   color: rgb(137, 223, 238);
 }
 
+.new-edit-form{
+    color: rgb(0, 0, 0);
+    font-weight: 900;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   background-image: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0)),

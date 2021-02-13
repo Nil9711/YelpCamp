@@ -22,7 +22,7 @@ const sample = array => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
     await Campground.deleteMany({});
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 10; i++) {
         const random1000 = Math.floor(Math.random() * 1000);
         const price = Math.floor(Math.random() * 30) + 10;
         const camp = new Campground({
@@ -31,7 +31,7 @@ const seedDB = async () => {
             title: `${sample(descriptors)} ${sample(places)}`,
             images: [
                 {
-                    url: "https://res.cloudinary.com/db9dlwp6d/image/upload/v1613031334/YelpCamp/k8dtql5t6rmxbiv9vymk.jpg",
+                    url: "https://res.cloudinary.com/db9dlwp6d/image/upload/v1613230702/YelpCamp/kst98imttxgfmvv8zu1c.jpg",
                     filename: "YelpCamp/k8dtql5t6rmxbiv9vymk"
                 },
                 {
@@ -41,7 +41,10 @@ const seedDB = async () => {
             ],
             geometry: {
                 type: "Point",
-                coordinates: [-113.1331, 47.0202]
+                coordinates: [
+                    cities[random1000].longitude,
+                    cities[random1000].latitude,
+                ]
             },
             description: `Lorem ipsum dolor sit
             amet consectetur adipisicing elit. Quisquam beatae provident rem, facere nostrum cum deleniti error aperiam

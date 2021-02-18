@@ -7,7 +7,6 @@ const path = require('path');
 const mongoose = require('mongoose');
 const Campground = require('./models/campground');
 const methodOverride = require('method-override');
-const morgan = require('morgan');
 const catchAsync = require('./utils/catchAsync')
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/expressError')

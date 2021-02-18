@@ -23,10 +23,14 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet')
+const dbUrl = process.env.DB_URL;
+const localDbUrl = 'mongodb://localhost:27017/yelp-camp';
+const {MongoStore} = require('connect-mongo');
+const MongoDBStore = require('connect-mongo')(session);
+const secret = process.env.SECRET || 'thisshouldbeabettersecret';
 
 
-
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+mongoose.connect(dbUrl || localDbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -50,11 +54,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(methodOverride('_method'))
 app.use(mongoSanitize());
 
+const store = new MongoDBStore({
+    url: dbUrl,
+    secret,
+    touchAfter: 24 * 60 * 60
+})
 
+store.on("error", function(e){
+    console.log(e)
+})
 
 const sessionConfig = {
+    store,
     name: 'session',
-    secret: 'thisshouldbeabettersecret!',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -91,7 +104,8 @@ const connectSrcUrls = [
     "https://b.tiles.mapbox.com/",
     "https://events.mapbox.com/",
 ];
-const fontSrcUrls = [];
+const fontSrcUrls = ["https://fonts.googleapis.com/",
+                        "https://fonts.gstatic.com/"];
 app.use(
     helmet.contentSecurityPolicy({
         directives: {
@@ -108,7 +122,7 @@ app.use(
                 "https://res.cloudinary.com/db9dlwp6d/", //SHOULD MATCH YOUR CLOUDINARY ACCOUNT! 
                 "https://images.unsplash.com/",
             ],
-            fontSrc: ["'self'", ...fontSrcUrls],
+            fontSrc: ["'self'", "'unsafe-inline'", ...fontSrcUrls],
         },
     })
 );
